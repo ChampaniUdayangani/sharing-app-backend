@@ -74,8 +74,7 @@ router.get("/callback", (req, res) => {
             });
 
     } else {
-        res.redirect("/verify");
-        // res.status(400).send("Required parameters missing");
+        res.status(400).send("Required parameters missing");
     }
 });
 
