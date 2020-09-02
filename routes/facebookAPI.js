@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response, Router } from "express";
-import request from "request-promise";
-const router = Router();
+var express = require('express');
+var request = require('request-promise');
+var router = express.Router();
+require('dotenv').config();
 
 // router.all("/*", (req: Request, res: Response, next: NextFunction) => {
    
