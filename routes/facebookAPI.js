@@ -3,9 +3,6 @@ var request = require('request-promise');
 var router = express.Router();
 require('dotenv').config();
 
-// router.all("/*", (req: Request, res: Response, next: NextFunction) => {
-   
-// });
 
 let pageID;
 let pageAccessToken;
