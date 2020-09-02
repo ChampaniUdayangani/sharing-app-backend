@@ -8,7 +8,7 @@ require('dotenv').config();
 // Define globally used variables
 const clientID = process.env.SB_CLIENT_ID;
 const scopes = "pages_read_engagement pages_manage_posts";
-const appUrl = 'http://localhost:3000/callback'
+const appUrl = 'https://sharing-app-bc.herokuapp.com/callback'
 
 // Default route
 router.get("/", (req, res) => {
@@ -49,7 +49,7 @@ router.get("/callback", (req, res) => {
 
         const accessTokenPayload = {
             'grant_type': 'authorization_code',
-            'redirect_uri': 'https:localhost:3000/verify',
+            'redirect_uri': 'https://sharing-app-bc.herokuapp.com/verify',
             'client_id': clientID,
             'code': code,
         };
