@@ -6,7 +6,7 @@ var router = express.Router();
 require('dotenv').config();
 
 // Define globally used variables
-const clientID = process.env.SB_CLIENT_ID;
+const clientID = '670252860245064';
 const scopes = "pages_read_engagement pages_manage_posts";
 const appUrl = 'https://sharing-app-bc.herokuapp.com/callback'
 
