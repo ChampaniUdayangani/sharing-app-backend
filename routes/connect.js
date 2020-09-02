@@ -7,7 +7,7 @@ require('dotenv').config();
 
 // Define globally used variables
 const clientID = '670252860245064';
-const scopes = "pages_read_engagement pages_manage_posts user_friends manage_friendlists";
+const scopes = "pages_read_engagement pages_manage_posts user_friends";
 const appUrl = 'https://sharing-app-bc.herokuapp.com/callback'
 
 // Default route
