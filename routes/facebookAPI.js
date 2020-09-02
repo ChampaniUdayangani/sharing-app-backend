@@ -46,9 +46,6 @@ router.get("/posts", (req, res) => {
     var options = {
         method: 'POST',
         uri: postUrl,
-        headers: {
-            "Authorization": 'Bearer EAAJhl2elBEgBAJJ8To57gZA0KR7ZBwvYAXIuSvVB8TTHtLPHZC6JW0kc3T0FwZCgO51ZCk5CZC835AcoPesJLFg1ZC1xzphxyOYReswPDdhCu5ZCAFOWTeVdPQl27fXadz5JeDvvQDzG72nlQLRdbZBhZAHbHOwOx0MIyZBX9io5098xHVBUxFQjzoT',
-        },
         json: true 
     };
      
