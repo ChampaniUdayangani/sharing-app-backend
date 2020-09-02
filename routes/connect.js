@@ -49,7 +49,7 @@ router.get("/callback", (req, res) => {
 
         const accessTokenPayload = {
             'grant_type': 'authorization_code',
-            'redirect_uri': 'https://sharing-app-bc.herokuapp.com/verify',
+            'redirect_uri': 'https://sharing-app-bc.herokuapp.com/callback',
             'client_id': clientID,
             'client_secret': '3b1624f837401f79d3f5eaecb07a19b0',
             'code': code,
@@ -74,7 +74,8 @@ router.get("/callback", (req, res) => {
             });
 
     } else {
-        res.status(400).send("Required parameters missing");
+        res.send(res);
+        // res.status(400).send("Required parameters missing");
     }
 });
 
