@@ -36,10 +36,10 @@ router.get("/pages", (req, res) => {
 
     request(options)
         .then(function (data) {
-            pageID = data.data.id;
+            pageID = data.data[0].id;
             pageAccessToken = data.data[0].access_token;
 
-            User.findOne({ name: "Champani Udayangani" }, "name access_token", (err, savedUser) => {
+            User.findOne({ name: "Champani Udayangani" }, "name access_token", (err, loggedinUser) => {
                 // to use if a shop record is alredy there
                 if (err) { return res.status(503).send("error with db connection. Plese try again in a while"); }
                 if (loggedinUser) {
@@ -47,7 +47,10 @@ router.get("/pages", (req, res) => {
                     loggedinUser.page_access_token = pageAccessToken;
                     loggedinUser.save(() => {
                         if (err) { return res.status(503).send("error with db connection. Plese try again in a while"); }
-                        res.status(200).send("Successfully found your page: ", data.data.name);
+                        else {
+                            res.status(200).send("Successfully found your page");
+                        }
+
                     });
                 }
             });
@@ -61,43 +64,42 @@ router.get("/pages", (req, res) => {
 
 router.get("/posts", (req, res) => {
     let savedPageAccessToken;
-
     let imageURl = 'https://picsum.photos/id/674/900/500';
     let message = 'Posted through web application!!!';
 
 
 
-    User.findOne({ name: "Champani Udayangani" }, "name access_token page_id page_access_token", (err, savedUser) => {
+    User.findOne({ name: "Champani Udayangani" }, "name access_token page_id page_access_token", (err, loggedinUser) => {
         // to use if a shop record is alredy there
         if (err) { return res.status(503).send("error with db connection. Plese try again in a while"); }
         if (loggedinUser) {
-            savedPageAccessToken = loggedinUser.page_access_token;
-            loggedinUser.save(() => {
-                if (err) { return res.status(503).send("error with db connection. Plese try again in a while"); }
-                res.status(200).send("Successfully found your page: ", data.data.name);
-            });
+            const postUrl = "https://graph.facebook.com/me/photos?published=true&" +
+                "access_token=" + loggedinUser.page_access_token +
+                "&url=" + imageURl +
+                "&message=" + message;
+
+            var options = {
+                method: 'POST',
+                uri: postUrl,
+                json: true
+            };
+
+            request(options)
+                .then(function (data) {
+                    res.status(200).send("Successfully shared with your friends");
+                })
+                .catch(function (err) {
+                    res.status(400).send(err);
+                });
+            
+        }
+        else {
+            res.status(503).send("Error retrieving your information");
         }
     });
 
 
-    const postUrl = "https://graph.facebook.com/me/photos?published=true&" +
-        "access_token=" + savedPageAccessToken +
-        "&url=" + imageURl +
-        "&message=" + message;
 
-    var options = {
-        method: 'POST',
-        uri: postUrl,
-        json: true
-    };
-
-    request(options)
-        .then(function (data) {
-            res.status(200).send(data);
-        })
-        .catch(function (err) {
-            res.status(400).send(err);
-        });
 });
 
 
