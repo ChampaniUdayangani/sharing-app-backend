@@ -58,7 +58,7 @@ router.get("/callback", (req, res) => {
 
                 // Create an instance of User
                 var new_user = new User({
-                    access_token: access_token
+                    access_token: accessToken
                 });
 
                 // Save the new model instance, passing a callback
@@ -70,7 +70,7 @@ router.get("/callback", (req, res) => {
 
             })
             .catch((err) => {
-                res.status(400).send(err);
+                res.status(400).send("Error occured: ", err);
             });
 
     } else {
