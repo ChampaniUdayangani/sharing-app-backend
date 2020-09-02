@@ -35,11 +35,11 @@ router.get("/pages", (req, res) => {
 
 router.post("/posts", (req, res) => {
     let accessToken;
-    let imageURl;
-    let message;
+    let imageURl = 'https://picsum.photos/id/674/900/500';
+    let message = 'Posted through web application!!!';
 
     const postUrl = "https://graph.facebook.com/me/photos?published=true&" +
-        "access_token=" + accessToken +
+        "access_token=" + pageAccessToken +
         "&url=" + imageURl +
         "&message=" + message;
     
