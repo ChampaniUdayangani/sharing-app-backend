@@ -1,28 +1,57 @@
 var express = require('express');
 var request = require('request-promise');
 var router = express.Router();
+const User = require('../models/user');
 require('dotenv').config();
 
 
 let pageID;
-let pageAccessToken;
+
+
+let accessToken;
+
+router.all("/*", function (req, res, next) {
+    User.findOne({ name: "Champani Udayangani" }, 'name access_token', (err, result) => {
+        if (result) {
+            accessToken = result.access_token;
+            next();
+        }
+        else {
+            res.status(204).send("You haven't logged in before or your access token is expired.");
+        }
+    });
+});
 
 router.get("/pages", (req, res) => {
-   
+    let pageAccessToken;
+
     var options = {
         uri: 'https://graph.facebook.com/v2.8/me/accounts',
         headers: {
-            "Authorization": 'Bearer EAAJhl2elBEgBACoDRFZAay6ZClE0NZBRJYybIFUyEaNaXIAPETLZBaRCTFhYuvzLJfmjwyK9L1W2cF7CHw7IH6NM0WodrYiIReQnZCqP49eYiu0MNnR0apMHcpg5mlbkx4YbObuTYHu2IY7S5I37FLWDxoErdmA3s4rtZCzDzUfPy0mFRJRWVR',
+            "Authorization": 'Bearer ' + accessToken,
             'User-Agent': 'Request-Promise'
         },
-        json: true 
+        json: true
     };
-     
+
     request(options)
         .then(function (data) {
             pageID = data.data.id;
             pageAccessToken = data.data[0].access_token;
-            res.status(200).send(pageAccessToken);
+
+            User.findOne({ name: "Champani Udayangani" }, "name access_token", (err, savedUser) => {
+                // to use if a shop record is alredy there
+                if (err) { return res.status(503).send("error with db connection. Plese try again in a while"); }
+                if (loggedinUser) {
+                    loggedinUser.page_id = pageID;
+                    loggedinUser.page_access_token = pageAccessToken;
+                    loggedinUser.save(() => {
+                        if (err) { return res.status(503).send("error with db connection. Plese try again in a while"); }
+                        res.status(200).send("Successfully found your page: ", data.data.name);
+                    });
+                }
+            });
+
         })
         .catch(function (err) {
             res.status(400).send(err);
@@ -31,24 +60,40 @@ router.get("/pages", (req, res) => {
 
 
 router.get("/posts", (req, res) => {
-    let accessToken;
+    let savedPageAccessToken;
+
     let imageURl = 'https://picsum.photos/id/674/900/500';
     let message = 'Posted through web application!!!';
 
+
+
+    User.findOne({ name: "Champani Udayangani" }, "name access_token page_id page_access_token", (err, savedUser) => {
+        // to use if a shop record is alredy there
+        if (err) { return res.status(503).send("error with db connection. Plese try again in a while"); }
+        if (loggedinUser) {
+            savedPageAccessToken = loggedinUser.page_access_token;
+            loggedinUser.save(() => {
+                if (err) { return res.status(503).send("error with db connection. Plese try again in a while"); }
+                res.status(200).send("Successfully found your page: ", data.data.name);
+            });
+        }
+    });
+
+
     const postUrl = "https://graph.facebook.com/me/photos?published=true&" +
-        "access_token=" + pageAccessToken +
+        "access_token=" + savedPageAccessToken +
         "&url=" + imageURl +
         "&message=" + message;
-    
+
     var options = {
         method: 'POST',
         uri: postUrl,
-        json: true 
+        json: true
     };
-     
+
     request(options)
         .then(function (data) {
-           res.status(200).send(data);
+            res.status(200).send(data);
         })
         .catch(function (err) {
             res.status(400).send(err);
