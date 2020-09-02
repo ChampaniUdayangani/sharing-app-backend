@@ -49,7 +49,7 @@ router.get("/callback", (req, res) => {
 
         const accessTokenPayload = {
             'grant_type': 'authorization_code',
-            'redirect_uri': 'https://sharing-app-bc.herokuapp.com/callback',
+            'redirect_uri': 'https://sharing-app-bc.herokuapp.com/callback/token',
             'client_id': clientID,
             'client_secret': '3b1624f837401f79d3f5eaecb07a19b0',
             'code': code,
@@ -81,7 +81,7 @@ router.get("/callback", (req, res) => {
 
 
 
-router.get("/verify", (req, res) => {
+router.get("/callback/token", (req, res) => {
     let accessToken = res;
     res.send("Access Token: ", accessToken);
   
