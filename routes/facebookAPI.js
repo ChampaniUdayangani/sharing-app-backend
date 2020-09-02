@@ -15,7 +15,7 @@ router.get("/pages", (req, res) => {
     var options = {
         uri: 'https://graph.facebook.com/v2.8/me/accounts',
         headers: {
-            "Authorization": 'Bearer EAAJhl2elBEgBAJJ8To57gZA0KR7ZBwvYAXIuSvVB8TTHtLPHZC6JW0kc3T0FwZCgO51ZCk5CZC835AcoPesJLFg1ZC1xzphxyOYReswPDdhCu5ZCAFOWTeVdPQl27fXadz5JeDvvQDzG72nlQLRdbZBhZAHbHOwOx0MIyZBX9io5098xHVBUxFQjzoT',
+            "Authorization": 'Bearer EAAJhl2elBEgBACoDRFZAay6ZClE0NZBRJYybIFUyEaNaXIAPETLZBaRCTFhYuvzLJfmjwyK9L1W2cF7CHw7IH6NM0WodrYiIReQnZCqP49eYiu0MNnR0apMHcpg5mlbkx4YbObuTYHu2IY7S5I37FLWDxoErdmA3s4rtZCzDzUfPy0mFRJRWVR',
             'User-Agent': 'Request-Promise'
         },
         json: true 
