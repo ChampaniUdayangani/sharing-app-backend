@@ -51,15 +51,12 @@ router.get("/callback", (req, res) => {
             'grant_type': 'authorization_code',
             'redirect_uri': 'https://sharing-app-bc.herokuapp.com/verify',
             'client_id': clientID,
+            'client_secret': '5b8fecbc9645b55ea5045367b9650e80',
             'code': code,
         };
 
         var options = {
             method: 'POST',
-            headers: {
-                "Authorization": 'Basic NjcwMjUyODYwMjQ1MDY0OjViOGZlY2JjOTY0NWI1NWVhNTA0NTM2N2I5NjUwZTgw',
-                'User-Agent': 'Request-Promise'
-            },
             uri: 'https://graph.facebook.com/oauth/access_token',
             body: accessTokenPayload,
             json: true
