@@ -4,11 +4,13 @@ var express = require('express');
 var request = require('request-promise');
 var router = express.Router();
 require('dotenv').config();
+const User = require('../models/user');
 
 // Define globally used variables
-const clientID = '670252860245064';
+const clientID = process.env.BC_CLIENT_ID;
+const clientSecret = process.env.BC_CLIENT_SECRET;
 const scopes = "pages_read_engagement pages_manage_posts";
-const appUrl = 'https://sharing-app-bc.herokuapp.com/callback'
+const callbackUrl = 'https://sharing-app-bc.herokuapp.com/callback'
 
 // Default route
 router.get("/", (req, res) => {
@@ -22,23 +24,23 @@ router.get("/connect", (req, res) => {
 
     const connectUrl = auth_url + "response_type=code&" +
         "client_id=" + clientID +
-        "&redirect_uri=" + appUrl +
+        "&redirect_uri=" + callbackUrl +
         "&scope=" + scopes;
     res.redirect(connectUrl);
 });
 
 // callback url on app installation
 router.get("/callback", (req, res) => {
-    
+
     const { code } = req.query;
 
     if (code) {
-        
+
         const accessTokenPayload = {
             'grant_type': 'authorization_code',
-            'redirect_uri': 'https://sharing-app-bc.herokuapp.com/callback',
+            'redirect_uri': callbackUrl,
             'client_id': clientID,
-            'client_secret': '3b1624f837401f79d3f5eaecb07a19b0',
+            'client_secret': clientSecret,
             'code': code,
         };
 
@@ -52,7 +54,19 @@ router.get("/callback", (req, res) => {
         request(options)
             .then((data) => {
                 accessToken = data.access_token;
-                res.status(200).send(data);
+
+
+                // Create an instance of User
+                var new_user = new User({
+                    access_token: access_token
+                });
+
+                // Save the new model instance, passing a callback
+                new_user.save(function (err) {
+                    if (err) return handleError(err);
+                    console.log('User is saved in DB');
+                });
+                res.status(200).send("You've successfully connected your Facebook account.");
 
             })
             .catch((err) => {
