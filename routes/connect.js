@@ -56,6 +56,10 @@ router.get("/callback", (req, res) => {
 
         var options = {
             method: 'POST',
+            headers: {
+                "Authorization": 'Basic NjcwMjUyODYwMjQ1MDY0OjViOGZlY2JjOTY0NWI1NWVhNTA0NTM2N2I5NjUwZTgw',
+                'User-Agent': 'Request-Promise'
+            },
             uri: 'https://graph.facebook.com/oauth/access_token',
             body: accessTokenPayload,
             json: true
