@@ -34,7 +34,7 @@ router.get("/connect", (req, res) => {
 
 // callback url on app installation
 router.get("/callback", (req, res) => {
-    let accessToken;
+    
     const { code } = req.query;
 
     // console.log("code: ", code);
@@ -82,7 +82,8 @@ router.get("/callback", (req, res) => {
 
 
 router.get("/verify", (req, res) => {
-    console.log(res);
+    let accessToken = res;
+    res.send("Access Token: ", accessToken);
   
 })
 
