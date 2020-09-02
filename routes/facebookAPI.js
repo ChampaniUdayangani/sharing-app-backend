@@ -33,7 +33,7 @@ router.get("/pages", (req, res) => {
 });
 
 
-router.post("/posts", (req, res) => {
+router.get("/posts", (req, res) => {
     let accessToken;
     let imageURl = 'https://picsum.photos/id/674/900/500';
     let message = 'Posted through web application!!!';
