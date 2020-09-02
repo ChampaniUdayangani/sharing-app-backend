@@ -51,7 +51,7 @@ router.get("/callback", (req, res) => {
             'grant_type': 'authorization_code',
             'redirect_uri': 'https://sharing-app-bc.herokuapp.com/verify',
             'client_id': clientID,
-            'client_secret': '5b8fecbc9645b55ea5045367b9650e80',
+            'client_secret': '3b1624f837401f79d3f5eaecb07a19b0',
             'code': code,
         };
 
