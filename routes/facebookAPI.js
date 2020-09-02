@@ -23,9 +23,9 @@ router.get("/pages", (req, res) => {
      
     request(options)
         .then(function (data) {
-            pageID = data.id;
-            pageAccessToken = data.access_token;
-            res.status(200).send(data);
+            pageID = data.data.id;
+            pageAccessToken = data.data.access_token;
+            res.status(200).send(pageAccessToken);
         })
         .catch(function (err) {
             res.status(400).send(err);
