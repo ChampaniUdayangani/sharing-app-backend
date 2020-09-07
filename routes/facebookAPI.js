@@ -29,7 +29,8 @@ router.get("/pages", (req, res) => {
         uri: 'https://graph.facebook.com/v2.8/me/accounts',
         headers: {
             "Authorization": 'Bearer ' + accessToken,
-            'User-Agent': 'Request-Promise'
+            'User-Agent': 'Request-Promise',
+            "Access-Control-Allow-Origin": "*"
         },
         json: true
     };
@@ -80,8 +81,11 @@ router.get("/posts", (req, res) => {
 
             var options = {
                 method: 'POST',
+                headers:{
+                    "Access-Control-Allow-Origin": "*"
+                },
                 uri: postUrl,
-                json: true
+                json: true,
             };
 
             request(options)
