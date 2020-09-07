@@ -51,6 +51,10 @@ router.get("/callback", (req, res) => {
             json: true
         };
 
+        res.header('Content-Type', 'application/json');
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT');
+
         request(options)
             .then((data) => {
                 accessToken = data.access_token;
@@ -66,9 +70,8 @@ router.get("/callback", (req, res) => {
                     if (err) return handleError(err);
                     console.log('User is saved in DB');
                 });
-                res.setHeader('Content-Type', 'application/json');
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.status(200).send({ messge : "You've successfully connected your Facebook account."});
+
+                res.status(200).send({ messge: "You've successfully connected your Facebook account." });
 
             })
             .catch((err) => {
