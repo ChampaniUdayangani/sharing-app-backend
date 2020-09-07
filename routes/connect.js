@@ -66,7 +66,7 @@ router.get("/callback", (req, res) => {
                     if (err) return handleError(err);
                     console.log('User is saved in DB');
                 });
-                res.status(200).send("You've successfully connected your Facebook account.");
+                res.status(200).send({ messge : "You've successfully connected your Facebook account."});
 
             })
             .catch((err) => {
