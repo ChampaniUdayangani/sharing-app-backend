@@ -66,6 +66,8 @@ router.get("/callback", (req, res) => {
                     if (err) return handleError(err);
                     console.log('User is saved in DB');
                 });
+                response.setHeader('Content-Type', 'application/json');
+                response.setHeader('Access-Control-Allow-Origin', '*')
                 res.status(200).send({ messge : "You've successfully connected your Facebook account."});
 
             })
