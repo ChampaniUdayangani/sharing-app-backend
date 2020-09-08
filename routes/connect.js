@@ -2,6 +2,7 @@
 const cors = require('cors');
 var express = require('express');
 var request = require('request-promise');
+const session = require('express-session');
 var router = express.Router();
 require('dotenv').config();
 const User = require('../models/user');
@@ -28,13 +29,28 @@ const corsOptions = {
 
 router.use(cors());
 
+var sessionObj = {
+    accessToken: '',
+    pageID: '',
+    pageAccessToken: '',
+    secret: 'sheseescheese',
+    cookie: {}
+}
+
+router.use(session(sessionObj));
 // Default route
 router.get("/", (req, res) => {
     res.send("Default Route");
 });
 
-// Authorization route
+// Default route
 router.get("/connect", (req, res) => {
+    res.send("Connect Route");
+});
+
+
+// Authorization route
+router.get("/facebook", (req, res) => {
 
     const auth_url = "https://www.facebook.com/dialog/oauth?";
     const state = "strawberries";
@@ -45,12 +61,13 @@ router.get("/connect", (req, res) => {
         "&scope=" + scopes +
         "&state=" + state;
 
-        return res.redirect(connectUrl);
+    res.send({ 'url': connectUrl });
 });
 
 // callback url on app installation
 router.get("/callback", (req, res) => {
-
+    
+    
     const { code, state } = req.query;
     if (state !== 'strawberries') {
         return res.status(403).send("Request origin cannot be verified");
@@ -78,20 +95,13 @@ router.get("/callback", (req, res) => {
 
             request(options)
                 .then((data) => {
-                    accessToken = data.access_token;
+                    let accessToken = data.access_token;
+
+                    var sessData = req.session;
+                    sessData.accessToken = accessToken;
 
 
-                    // Create an instance of User
-                    var new_user = new User({
-                        access_token: accessToken
-                    });
-
-                    // Save the new model instance, passing a callback
-                    new_user.save(function (err) {
-                        if (err) return handleError(err);
-                        console.log('User is saved in DB');
-                    });
-
+                    console.log("Access Token: ", req.session.access_token);
                     return res.status(200).send({ messge: "You've successfully connected your Facebook account." });
 
                 })
