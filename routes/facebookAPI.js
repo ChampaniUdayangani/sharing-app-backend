@@ -13,11 +13,11 @@ let accessToken;
 router.all("/*", function (req, res, next) {
     User.findOne({ name: "Champani Udayangani" }, 'name access_token', (err, result) => {
         if (result) {
-            accessToken = result.access_token;
+            accessToken = result.access_token;            
             next();
         }
         else {
-            res.status(204).send("You haven't logged in before or your access token is expired.");
+            return res.status(204).send("You haven't logged in before or your access token is expired.");
         }
     });
 });
@@ -49,7 +49,7 @@ router.get("/pages", (req, res) => {
                     loggedinUser.save(() => {
                         if (err) { return res.status(503).send("error with db connection. Plese try again in a while"); }
                         else {
-                            res.status(200).send("Successfully found your page");
+                            return res.status(200).send("Successfully found your page");
                         }
 
                     });
@@ -58,7 +58,7 @@ router.get("/pages", (req, res) => {
 
         })
         .catch(function (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
         });
 });
 
@@ -90,15 +90,15 @@ router.get("/posts", (req, res) => {
 
             request(options)
                 .then(function (data) {
-                    res.status(200).send("Successfully shared with your friends");
+                    return res.status(200).send("Successfully shared with your friends");
                 })
                 .catch(function (err) {
-                    res.status(400).send(err);
+                    return res.status(400).send(err);
                 });
             
         }
         else {
-            res.status(503).send("Error retrieving your information");
+            return res.status(503).send("Error retrieving your information");
         }
     });
 

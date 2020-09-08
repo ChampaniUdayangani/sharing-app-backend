@@ -1,5 +1,5 @@
 // Add imports
-
+const cors = require('cors');
 var express = require('express');
 var request = require('request-promise');
 var router = express.Router();
@@ -12,6 +12,22 @@ const clientSecret = process.env.BC_CLIENT_SECRET;
 const scopes = "pages_read_engagement pages_manage_posts";
 const callbackUrl = 'https://sharing-app-bc.herokuapp.com/callback'
 
+
+const corsOptions = {
+    origin: '*',
+
+    methods: [
+        'GET',
+        'POST',
+    ],
+
+    allowedHeaders: [
+        'Content-Type',
+    ],
+};
+
+router.use(cors());
+
 // Default route
 router.get("/", (req, res) => {
     res.send("Default Route");
@@ -21,68 +37,71 @@ router.get("/", (req, res) => {
 router.get("/connect", (req, res) => {
 
     const auth_url = "https://www.facebook.com/dialog/oauth?";
+    const state = "strawberries";
 
     const connectUrl = auth_url + "response_type=code&" +
         "client_id=" + clientID +
         "&redirect_uri=" + callbackUrl +
-        "&scope=" + scopes;
-    res.redirect(connectUrl);
+        "&scope=" + scopes +
+        "&state=" + state;
+
+        return res.redirect(connectUrl);
 });
 
 // callback url on app installation
 router.get("/callback", (req, res) => {
 
-    const { code } = req.query;
+    const { code, state } = req.query;
+    if (state !== 'strawberries') {
+        return res.status(403).send("Request origin cannot be verified");
+    }
+    else {
+        if (code) {
 
-    if (code) {
+            const accessTokenPayload = {
+                'grant_type': 'authorization_code',
+                'redirect_uri': callbackUrl,
+                'client_id': clientID,
+                'client_secret': clientSecret,
+                'code': code,
+            };
 
-        const accessTokenPayload = {
-            'grant_type': 'authorization_code',
-            'redirect_uri': callbackUrl,
-            'client_id': clientID,
-            'client_secret': clientSecret,
-            'code': code,
-        };
+            var options = {
+                method: 'POST',
+                headers: {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                uri: 'https://graph.facebook.com/oauth/access_token',
+                body: accessTokenPayload,
+                json: true
+            };
 
-        var options = {
-            method: 'POST',
-            headers:{
-                "Access-Control-Allow-Origin": "*"
-            },
-            uri: 'https://graph.facebook.com/oauth/access_token',
-            body: accessTokenPayload,
-            json: true
-        };
-
-        res.header('Content-Type', 'application/json');
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT');
-
-        request(options)
-            .then((data) => {
-                accessToken = data.access_token;
+            request(options)
+                .then((data) => {
+                    accessToken = data.access_token;
 
 
-                // Create an instance of User
-                var new_user = new User({
-                    access_token: accessToken
+                    // Create an instance of User
+                    var new_user = new User({
+                        access_token: accessToken
+                    });
+
+                    // Save the new model instance, passing a callback
+                    new_user.save(function (err) {
+                        if (err) return handleError(err);
+                        console.log('User is saved in DB');
+                    });
+
+                    return res.status(200).send({ messge: "You've successfully connected your Facebook account." });
+
+                })
+                .catch((err) => {
+                    return res.status(400).send({ error: "Error occured" });
                 });
 
-                // Save the new model instance, passing a callback
-                new_user.save(function (err) {
-                    if (err) return handleError(err);
-                    console.log('User is saved in DB');
-                });
-
-                res.status(200).send({ messge: "You've successfully connected your Facebook account." });
-
-            })
-            .catch((err) => {
-                res.status(400).send("Error occured: ", err);
-            });
-
-    } else {
-        res.status(400).send("Required parameters missing");
+        } else {
+            return res.status(400).send({ error: "Required parameters missing" });
+        }
     }
 });
 
