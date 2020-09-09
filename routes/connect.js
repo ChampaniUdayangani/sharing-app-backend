@@ -50,7 +50,7 @@ router.get("/facebook", (req, res) => {
         "client_id=" + clientID +
         "&redirect_uri=" + callbackUrl +
         "&scope=" + scopes +
-        "&state=" + state;
+        "&state=" + stateValue;
 
     res.cookie('state', stateValue);
     res.send({ 'url': connectUrl });
