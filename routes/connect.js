@@ -1,11 +1,13 @@
 // Add imports
-const cors = require('cors');
+var cors = require('cors');
 var express = require('express');
 var request = require('request-promise');
-const session = require('express-session');
+var session = require('express-session');
+var cookie = require('cookie');
+
 var router = express.Router();
 require('dotenv').config();
-const User = require('../models/user');
+
 
 // Define globally used variables
 const clientID = process.env.BC_CLIENT_ID;
@@ -14,67 +16,59 @@ const scopes = "pages_read_engagement pages_manage_posts";
 const callbackUrl = 'https://sharing-app-bc.herokuapp.com/callback'
 
 
-const corsOptions = {
-    origin: '*',
-
-    methods: [
-        'GET',
-        'POST',
-    ],
-
-    allowedHeaders: [
-        'Content-Type',
-    ],
-};
-
 router.use(cors());
 
+// Define session object signed with the secret
 var sessionObj = {
     accessToken: '',
     pageID: '',
     pageAccessToken: '',
     secret: 'sheseescheese',
-    cookie: {}
+    cookie: {
+        maxAge: 3600000
+    }
 }
 
+// Create the session
 router.use(session(sessionObj));
-// Default route
-router.get("/", (req, res) => {
-    res.send("Default Route");
-});
 
 // Default route
-router.get("/connect", (req, res) => {
-    res.send("Connect Route");
+router.get("/", (req, res) => {
+    res.send("Backend For Image Sharing App");
 });
 
 
 // Authorization route
 router.get("/facebook", (req, res) => {
 
+    // Facebook authorization endpoint
     const auth_url = "https://www.facebook.com/dialog/oauth?";
     const state = "strawberries";
 
+    // Construct connection url
     const connectUrl = auth_url + "response_type=code&" +
         "client_id=" + clientID +
         "&redirect_uri=" + callbackUrl +
         "&scope=" + scopes +
         "&state=" + state;
 
+    res.cookie('state', state);
     res.send({ 'url': connectUrl });
 });
 
-// callback url on app installation
+// callback route
 router.get("/callback", (req, res) => {
-    
-    
+    // Get state saved in cookie
+    const stateCookie = cookie.parse(req.headers.cookie).state;
     const { code, state } = req.query;
-    if (state !== 'strawberries') {
-        return res.status(403).send("Request origin cannot be verified");
+
+    // Check for state changes
+    if (state !== stateCookie) {
+        return res.status(403).send("Request origin can not be verified");
     }
     else {
         if (code) {
-
+            // Costruct access token payload
             const accessTokenPayload = {
                 'grant_type': 'authorization_code',
                 'redirect_uri': callbackUrl,
@@ -83,6 +77,7 @@ router.get("/callback", (req, res) => {
                 'code': code,
             };
 
+            // POST request to get access token providing temporary code received
             var options = {
                 method: 'POST',
                 headers: {
@@ -95,14 +90,10 @@ router.get("/callback", (req, res) => {
 
             request(options)
                 .then((data) => {
-                    let accessToken = data.access_token;
-
-                    var sessData = req.session;
-                    sessData.accessToken = accessToken;
-
-
-                    console.log("Access Token: ", req.session.access_token);
-                    return res.status(200).send({ messge: "You've successfully connected your Facebook account." });
+                    // Store access token only within the app
+                    global.token = data.access_token;
+                  
+                    return res.status(200).send({ messge: "You've successfully connected your Facebook account."});
 
                 })
                 .catch((err) => {
