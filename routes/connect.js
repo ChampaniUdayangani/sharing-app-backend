@@ -14,7 +14,7 @@ const clientID = process.env.BC_CLIENT_ID;
 const clientSecret = process.env.BC_CLIENT_SECRET;
 const scopes = "pages_read_engagement pages_manage_posts";
 const callbackUrl = 'https://sharing-app-bc.herokuapp.com/callback'
-
+const stateValue = "strawberries";
 
 router.use(cors());
 
@@ -43,7 +43,7 @@ router.get("/facebook", (req, res) => {
 
     // Facebook authorization endpoint
     const auth_url = "https://www.facebook.com/dialog/oauth?";
-    const state = "strawberries";
+    
 
     // Construct connection url
     const connectUrl = auth_url + "response_type=code&" +
@@ -52,18 +52,17 @@ router.get("/facebook", (req, res) => {
         "&scope=" + scopes +
         "&state=" + state;
 
-    res.cookie('state', state);
+    res.cookie('state', stateValue);
     res.send({ 'url': connectUrl });
 });
 
 // callback route
 router.get("/callback", (req, res) => {
-    // Get state saved in cookie
-    const stateCookie = cookie.parse(req.headers.cookie).state;
+    
     const { code, state } = req.query;
 
     // Check for state changes
-    if (state !== stateCookie) {
+    if (state !== stateValue) {
         return res.status(403).send("Request origin can not be verified");
     }
     else {
