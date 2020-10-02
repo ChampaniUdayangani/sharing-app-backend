@@ -1,3 +1,9 @@
+// ******************************************************************
+// SSD Assignment 02   - Software Engineering 
+// Udayangani Hamy W.C - IT 1602 3574 
+// Ranawake P I        - IT 1609 7520
+// ******************************************************************
+
 // Add imports
 var cors = require('cors');
 var express = require('express');
