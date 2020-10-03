@@ -10,9 +10,11 @@ var express = require('express');
 var request = require('request-promise');
 var session = require('express-session');
 var cookie = require('cookie');
-
 var router = express.Router();
 require('dotenv').config();
+
+
+
 
 
 // Define globally used variables
@@ -22,7 +24,15 @@ const scopes = "pages_read_engagement pages_manage_posts";
 const callbackUrl = 'https://sharing-app-bc.herokuapp.com/callback'
 const stateValue = "strawberries";
 
+
+
+
+
 router.use(cors());
+
+
+
+
 
 // Define session object signed with the secret
 var sessionObj = {
@@ -34,6 +44,10 @@ var sessionObj = {
         maxAge: 3600000
     }
 }
+
+
+
+
 
 // Create the session
 router.use(session(sessionObj));
@@ -50,6 +64,10 @@ router.get("/facebook", (req, res) => {
     // Facebook authorization endpoint
     const auth_url = "https://www.facebook.com/dialog/oauth?";
     
+
+
+
+
 
     // Construct connection url
     const connectUrl = auth_url + "response_type=code&" +
@@ -110,6 +128,12 @@ router.get("/callback", (req, res) => {
         }
     }
 });
+
+
+
+
+
+
 
 
 

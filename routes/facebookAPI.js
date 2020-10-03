@@ -8,7 +8,6 @@ var express = require('express');
 var request = require('request-promise');
 var bodyParser = require('body-parser');
 var router = express.Router();
-
 var cookie = require('cookie');
 var connection = require('./connect');
 
