@@ -13,10 +13,6 @@ var cookie = require('cookie');
 var router = express.Router();
 require('dotenv').config();
 
-
-
-
-
 // Define globally used variables
 const clientID = process.env.BC_CLIENT_ID;
 const clientSecret = process.env.BC_CLIENT_SECRET;
@@ -24,15 +20,7 @@ const scopes = "pages_read_engagement pages_manage_posts";
 const callbackUrl = 'https://sharing-app-bc.herokuapp.com/callback'
 const stateValue = "strawberries";
 
-
-
-
-
 router.use(cors());
-
-
-
-
 
 // Define session object signed with the secret
 var sessionObj = {
@@ -45,10 +33,6 @@ var sessionObj = {
     }
 }
 
-
-
-
-
 // Create the session
 router.use(session(sessionObj));
 
@@ -57,25 +41,14 @@ router.get("/", (req, res) => {
     res.send("Backend For Image Sharing App");
 });
 
-
 // Authorization route
 router.get("/facebook", (req, res) => {
 
     // Facebook authorization endpoint
     const auth_url = "https://www.facebook.com/dialog/oauth?";
-    
-
-
-
-
 
     // Construct connection url
-    const connectUrl = auth_url + "response_type=code&" +
-        "client_id=" + clientID +
-        "&redirect_uri=" + callbackUrl +
-        "&scope=" + scopes +
-        "&state=" + stateValue;
-
+    const connectUrl = auth_url + "response_type=code&" +"client_id=" + clientID +"&redirect_uri=" + callbackUrl +"&scope=" + scopes +"&state=" + stateValue;
     res.cookie('state', stateValue);
     res.send({ 'url': connectUrl });
 });
@@ -93,11 +66,7 @@ router.get("/callback", (req, res) => {
         if (code) {
             // Costruct access token payload
             const accessTokenPayload = {
-                'grant_type': 'authorization_code',
-                'redirect_uri': callbackUrl,
-                'client_id': clientID,
-                'client_secret': clientSecret,
-                'code': code,
+                'grant_type': 'authorization_code','redirect_uri': callbackUrl,'client_id': clientID,'client_secret': clientSecret,'code': code,
             };
 
             // POST request to get access token providing temporary code received
@@ -115,7 +84,6 @@ router.get("/callback", (req, res) => {
                 .then((data) => {
                     // Store access token only within the app
                     global.token = data.access_token;
-                  
                     return res.status(200).send({ messge: "You've successfully connected your Facebook account."});
 
                 })
@@ -128,13 +96,5 @@ router.get("/callback", (req, res) => {
         }
     }
 });
-
-
-
-
-
-
-
-
 
 module.exports = router;

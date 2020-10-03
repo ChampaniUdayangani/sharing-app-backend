@@ -13,7 +13,6 @@ var connection = require('./connect');
 
 require('dotenv').config();
 
-
 let pageAccessToken;
 let pageName;
 
@@ -82,5 +81,4 @@ router.post("/posts",jsonParser, (req, res) => {
     }
 
 });
-
 module.exports = router;
