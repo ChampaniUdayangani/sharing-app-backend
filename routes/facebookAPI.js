@@ -48,6 +48,7 @@ router.get("/pages", (req, res) => {
         });
 });
 
+// 
 // Posts route to create a post in page feed
 router.post("/posts",jsonParser, (req, res) => {
     // console.log(req.body);
@@ -91,18 +92,6 @@ module.exports = router;
 
 
 
-//
-
-
-
-
-
-
-
-
-
-
-//
 
 
 
@@ -116,14 +105,6 @@ module.exports = router;
 
 
 
-//
-
-
-
-
-
-
-//
 
 
 
@@ -133,7 +114,6 @@ module.exports = router;
 
 
 
-//
 
 
 
@@ -142,4 +122,17 @@ module.exports = router;
 
 
 
-// Export 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
