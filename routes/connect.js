@@ -96,10 +96,3 @@ router.get("/callback", (req, res) => {
 });
 
 module.exports = router;
-
-
-
-
-//
-//
-//
