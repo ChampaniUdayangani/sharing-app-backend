@@ -43,7 +43,6 @@ router.get("/", (req, res) => {
 
 // Authorization route
 router.get("/facebook", (req, res) => {
-
     // Facebook authorization endpoint
     const auth_url = "https://www.facebook.com/dialog/oauth?";
 
@@ -55,7 +54,6 @@ router.get("/facebook", (req, res) => {
 
 // callback route
 router.get("/callback", (req, res) => {
-    
     const { code, state } = req.query;
 
     // Check for state changes
@@ -98,3 +96,6 @@ router.get("/callback", (req, res) => {
 });
 
 module.exports = router;
+
+
+
