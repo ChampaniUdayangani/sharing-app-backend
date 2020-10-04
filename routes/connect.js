@@ -22,6 +22,16 @@ const stateValue = "strawberries";
 
 router.use(cors());
 
+
+
+
+
+
+
+
+
+
+
 // Define session object signed with the secret
 var sessionObj = {
     accessToken: '',
@@ -52,6 +62,15 @@ router.get("/facebook", (req, res) => {
     res.cookie('state', stateValue);
     res.send({ 'url': connectUrl });
 });
+
+
+
+//
+
+//
+
+
+
 
 // callback route
 router.get("/callback", (req, res) => {
@@ -98,3 +117,57 @@ router.get("/callback", (req, res) => {
 });
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+
+
+
+
+
+
+
+
+
+
+ // Export

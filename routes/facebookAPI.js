@@ -20,11 +20,13 @@ let pageName;
 var jsonParser = bodyParser.json()
 
 // Pages route to get page details
+// The creawted HTML heawder with the acquired access token global.token
+// Will allow the user to get teh pages list 
 router.get("/pages", (req, res) => {
     
     // Call /me/accounts endpoint to get user's page details
     var options = {
-        uri: 'https://graph.facebook.com/v2.8/me/accounts',
+        uri: 'https://graph.facebook.com/v2.8/me/accounts', // Facebook resource server 
         headers: {
             "Authorization": 'Bearer ' + global.token,
             'User-Agent': 'Request-Promise',
@@ -82,3 +84,62 @@ router.post("/posts",jsonParser, (req, res) => {
 
 });
 module.exports = router;
+
+
+
+
+
+
+
+//
+
+
+
+
+
+
+
+
+
+
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+
+
+
+
+
+
+//
+
+
+
+
+
+
+
+
+
+//
+
+
+
+
+
+
+
+
+// Export 
