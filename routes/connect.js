@@ -2,6 +2,7 @@
 // SSD Assignment 02   - Software Engineering 
 // Udayangani Hamy W.C - IT 1602 3574 
 // Ranawake P I        - IT 1609 7520
+// connect.js
 // ******************************************************************
 
 // Add imports
@@ -61,6 +62,7 @@ router.get("/callback", (req, res) => {
     // If the state value "strawberries" on line 21 is changed on return
     // It could be a potential CSRF attack
     // So we issue an error stop the transaction 
+
     if (state !== stateValue) {
         return res.status(403).send("Request origin can not be verified");
     }
