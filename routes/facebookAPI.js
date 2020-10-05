@@ -4,8 +4,7 @@
 // Ranawake P I        - IT 1609 7520
 // Facebook API.js
 // Aquire pages list from Facebook
-// Createa  post on the retrieved Facebook page
-// And share an image
+// Createa  post on the retrieved Facebook page to share an image
 // ******************************************************************
 
 var express = require('express');
@@ -94,5 +93,3 @@ router.post("/posts",jsonParser, (req, res) => {
 
 
 module.exports = router;
-
-
