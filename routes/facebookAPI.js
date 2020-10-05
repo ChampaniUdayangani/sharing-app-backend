@@ -4,6 +4,7 @@
 // Ranawake P I        - IT 1609 7520
 // Facebook API.js
 // Aquire pages list from Facebook
+// Createa  post on Facebook
 // ******************************************************************
 
 var express = require('express');
