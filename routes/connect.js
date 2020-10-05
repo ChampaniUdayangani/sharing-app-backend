@@ -14,6 +14,8 @@ var cookie = require('cookie');
 var router = express.Router();
 require('dotenv').config();
 
+
+
 // Define globally used variables
 const clientID = process.env.BC_CLIENT_ID;
 const clientSecret = process.env.BC_CLIENT_SECRET;
@@ -104,5 +106,3 @@ router.get("/callback", (req, res) => {
 });
 
 module.exports = router;
-
-
