@@ -4,6 +4,7 @@
 // Ranawake P I        - IT 1609 7520
 // connect.js
 // Get the authorization code
+// Obtain the access Token
 // ******************************************************************
 
 // Add imports
