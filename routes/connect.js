@@ -29,24 +29,25 @@ var sessionObj = {
     pageAccessToken: '',
     secret: 'sheseescheese',
     cookie: {
-        maxAge: 3600000
+        maxAge: 3600000 // in seconds
     }
 }
 
-// Create the session
+// Create and bind the session
 router.use(session(sessionObj));
 
-// Default route
+// Default route for back end
 router.get("/", (req, res) => {
     res.send("Backend For Image Sharing App");
 });
 
 // Authorization route
 router.get("/facebook", (req, res) => {
+
     // Facebook authorization endpoint
     const auth_url = "https://www.facebook.com/dialog/oauth?";
 
-    // Construct connection url
+    // Construct connection url to request the authorization code
     const connectUrl = auth_url + "response_type=code&" +"client_id=" + clientID +"&redirect_uri=" + callbackUrl +"&scope=" + scopes +"&state=" + stateValue;
     res.cookie('state', stateValue);
     res.send({ 'url': connectUrl });
@@ -57,12 +58,17 @@ router.get("/callback", (req, res) => {
     const { code, state } = req.query;
 
     // Check for state changes
+    // If the state value "strawberries" on line 21 is changed on return
+    // It could be a potential CSRF attack
+    // So we issue an error stop the transaction 
     if (state !== stateValue) {
         return res.status(403).send("Request origin can not be verified");
     }
+
+    // If the state is verified we can request an access token
     else {
         if (code) {
-            // Costruct access token payload
+            // Costruct access token payload 
             const accessTokenPayload = {
                 'grant_type': 'authorization_code','redirect_uri': callbackUrl,'client_id': clientID,'client_secret': clientSecret,'code': code,
             };
