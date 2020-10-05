@@ -33,7 +33,6 @@ router.get("/pages", (req, res) => {
         json: true
     };
 
-
     request(options)
         .then(function (data) {
             // Save page token & name
@@ -43,11 +42,11 @@ router.get("/pages", (req, res) => {
 
         })
         .catch(function (err) {
+            // The provided page informations is invalid 
             res.status(400).send({'error': 'Error retrieving page details'});
         });
 });
 
-// 
 // Posts route to create a post in page feed
 router.post("/posts",jsonParser, (req, res) => {
 
@@ -68,6 +67,7 @@ router.post("/posts",jsonParser, (req, res) => {
             headers: {
                 "Access-Control-Allow-Origin": "*"
             },
+
             uri: postUrl,
             json: true,
         };
