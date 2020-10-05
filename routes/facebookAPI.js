@@ -3,6 +3,7 @@
 // Udayangani Hamy W.C - IT 1602 3574 
 // Ranawake P I        - IT 1609 7520
 // Facebook API.js
+// Aquire pages list from Facebook
 // ******************************************************************
 
 var express = require('express');
