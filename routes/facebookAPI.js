@@ -50,7 +50,7 @@ router.get("/pages", (req, res) => {
 // 
 // Posts route to create a post in page feed
 router.post("/posts",jsonParser, (req, res) => {
-    
+
     // console.log(req.body);
     let imageURl = req.body.url;
     let message = req.body.msg;
@@ -74,17 +74,19 @@ router.post("/posts",jsonParser, (req, res) => {
 
         request(options)
             .then(function (data) {
+                // The image is shared and sucessfully created a post
                 res.status(200).send({'message':'Successfully shared in your page '+ pageName});
             })
             .catch(function (err) {
+                // Error on invalid parameters
                 res.status(400).send({'message':'Parameters are invalid'});
             });
     }else{
+        // Erro on page retrieval
         res.status(400).send({'error': 'Error retrieving your page details'});
     }
 
 });
+
+
 module.exports = router;
-
-
-
