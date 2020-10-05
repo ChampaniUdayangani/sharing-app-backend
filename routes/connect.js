@@ -3,6 +3,7 @@
 // Udayangani Hamy W.C - IT 1602 3574 
 // Ranawake P I        - IT 1609 7520
 // connect.js
+// Get the authorization code
 // ******************************************************************
 
 // Add imports
@@ -13,8 +14,6 @@ var session = require('express-session');
 var cookie = require('cookie');
 var router = express.Router();
 require('dotenv').config();
-
-
 
 // Define globally used variables
 const clientID = process.env.BC_CLIENT_ID;
