@@ -10,9 +10,7 @@ var bodyParser = require('body-parser');
 var router = express.Router();
 var cookie = require('cookie');
 var connection = require('./connect');
-
 require('dotenv').config();
-
 let pageAccessToken;
 let pageName;
 
@@ -28,12 +26,13 @@ router.get("/pages", (req, res) => {
     var options = {
         uri: 'https://graph.facebook.com/v2.8/me/accounts', // Facebook resource server 
         headers: {
-            "Authorization": 'Bearer ' + global.token,
+            "Authorization": 'Bearer ' + global.token, // Specify the messeagae is a bearer of an access token 
             'User-Agent': 'Request-Promise',
             "Access-Control-Allow-Origin": "*"
         },
         json: true
     };
+
 
     request(options)
         .then(function (data) {
@@ -51,6 +50,7 @@ router.get("/pages", (req, res) => {
 // 
 // Posts route to create a post in page feed
 router.post("/posts",jsonParser, (req, res) => {
+    
     // console.log(req.body);
     let imageURl = req.body.url;
     let message = req.body.msg;
